@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property List</title>
+</head>
+<body>
+    <h1>Property Listings</h1>
+    <a href="{% url 'create_property' %}">Add New Property</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Property ID</th>
+                <th>Type</th>
+                <th>Location</th>
+                <th>Primary Market</th>
+                <th>Area</th>
+                <th>Rooms</th>
+                <th>Floor</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Description</th>
+                <th>Owner ID</th>
+                <th>Developer ID</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for property in properties %}
+            <tr>
+                <td>{{ property.0 }}</td>  <!-- property_id -->
+                <td>{{ property.1 }}</td>  <!-- property_type -->
+                <td>{{ property.2 }}</td>  <!-- location -->
+                <td>{{ property.3 }}</td>  <!-- primary_market -->
+                <td>{{ property.4 }}</td>  <!-- area -->
+                <td>{{ property.5 }}</td>  <!-- room_count -->
+                <td>{{ property.6 }}</td>  <!-- floor -->
+                <td>{{ property.7 }}</td>  <!-- address -->
+                <td>{{ property.8 }}</td>  <!-- price -->
+                <td>{{ property.9 }}</td>  <!-- status -->
+                <td>{{ property.10 }}</td> <!-- description -->
+                <td>{{ property.11 }}</td> <!-- owner_id -->
+                <td>{{ property.12 }}</td> <!-- developer_id -->
+                <td>
+                    <a href="#">View</a> |
+                    <a href="#">Edit</a> |
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
