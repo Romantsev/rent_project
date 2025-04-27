@@ -7,7 +7,6 @@ def list_properties(request):
         properties = cursor.fetchall()
     return render(request, 'properties_list.html', {'properties': properties})
 
-
 def create_property(request):
     if request.method == 'POST':
         property_type = request.POST['property_type']
@@ -37,3 +36,46 @@ def create_property(request):
         return redirect('list_properties')
 
     return render(request, 'create_property.html')
+
+def list_owners(request):
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT * FROM public.owner')
+        owners = cursor.fetchall()
+    return render(request, 'owners_list.html', {'owners': owners})
+
+def create_owner(request):
+    if request.method == 'POST':
+        owner_type = request.POST['owner_type']
+        name = request.POST['name']
+        address = request.POST['address']
+        phone_number = request.POST['phone_number']
+
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                INSERT INTO public.owner (owner_type, name, address, phone_number)
+                VALUES (%s, %s, %s, %s)
+            """, [owner_type, name, address, phone_number])
+        return redirect('list_owners')
+
+    return render(request, 'create_owner.html')
+
+def list_developers(request):
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT * FROM public.developer')
+        developers = cursor.fetchall()
+    return render(request, 'developers_list.html', {'developers': developers})
+
+def create_developer(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        address = request.POST['address']
+        phone_number = request.POST['phone_number']
+
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                INSERT INTO public.developer (name, address, phone_number)
+                VALUES (%s, %s, %s)
+            """, [name, address, phone_number])
+        return redirect('list_developers')
+
+    return render(request, 'create_developer.html')
