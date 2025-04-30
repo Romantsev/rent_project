@@ -17,8 +17,10 @@ urlpatterns = [
    path('login/', views.login_user, name='login'),
    path('logout/', views.logout_user, name='logout'),
    path('profile/<int:user_id>/', views.view_profile, name='view_profile'),
-   path('developer/<int:developer_id>/', views.view_developer, name='view_developer'),
+   path('profile/<int:user_id>/edit/', views.edit_profile, name='edit_profile'),
+   path('profile/<int:user_id>/delete/', views.delete_profile, name='delete_profile'),
    
+   path('developer/<int:developer_id>/', views.view_developer, name='view_developer'),
    path('developers/', views.list_developers, name='list_developers'),
    path('developer/create/', views.create_developer, name='create_developer'),
    path('developer/<int:developer_id>/edit/', views.edit_developer, name='edit_developer'),

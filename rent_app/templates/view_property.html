@@ -31,7 +31,7 @@
 
    <hr class="my-4">
    {% if is_owner %}
-   <a href="{% url 'add_inspection' property.property_id %}" class="btn btn-outline-success mb-3">Add Inspection</a>
+   <a href="{% url 'add_inspection' property.property_id  %}" class="btn btn-outline-success mb-3">Add Inspection</a>
    {% endif %}
 
    {% if inspections %}
