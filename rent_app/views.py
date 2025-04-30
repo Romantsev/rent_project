@@ -23,7 +23,7 @@ def list_properties(request):
     query = """
         SELECT 
             p.property_type, p.location, p.primary_market, p.status,
-            o.name AS owner_name, d.name AS developer_name, p.property_id, p.owner_id
+            o.name AS owner_name, d.name AS developer_name, p.property_id, p.owner_id, o.user_id, d.developer_id
         FROM 
             Property p
         JOIN owner o ON p.owner_id = o.owner_id
@@ -74,7 +74,6 @@ def list_properties(request):
             'sort': sort
         }
     })
-
 
 def create_property(request):
     errors = []
@@ -135,13 +134,21 @@ def create_property(request):
 def view_property(request, property_id):
     with connection.cursor() as cursor:
         cursor.execute("""
-            SELECT p.*, o.name, d.name, p.owner_id
+            SELECT 
+                p.property_id, p.property_type, p.location, p.primary_market, p.area,
+                p.room_count, p.floor, p.address, p.price, p.status, p.description,
+                p.owner_id, p.developer_id,
+                o.name AS owner_name, o.user_id,
+                d.name AS developer_name
             FROM property p
             LEFT JOIN owner o ON p.owner_id = o.owner_id
             LEFT JOIN developer d ON p.developer_id = d.developer_id
             WHERE p.property_id = %s
         """, [property_id])
-        property_data = cursor.fetchone()
+        
+        row = cursor.fetchone()
+        columns = [col[0] for col in cursor.description]
+        property_data = dict(zip(columns, row))
 
         cursor.execute("""
             SELECT inspection_date, property_condition
@@ -156,7 +163,7 @@ def view_property(request, property_id):
         with connection.cursor() as cursor:
             cursor.execute("SELECT owner_id FROM owner WHERE user_id = %s", [request.user.id])
             owner_result = cursor.fetchone()
-            if owner_result and owner_result[0] == property_data[-1]:
+            if owner_result and owner_result[0] == property_data['owner_id']:
                 is_owner = True
 
     return render(request, 'view_property.html', {
@@ -329,3 +336,39 @@ def delete_inspection(request, inspection_id):
         prop_id = cursor.fetchone()[0]
         cursor.execute("DELETE FROM inspection WHERE inspection_id = %s", [inspection_id])
     return redirect('view_property', property_id=prop_id)
+
+def view_profile(request, user_id):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM owner WHERE user_id = %s", [user_id])
+        owner = cursor.fetchone()
+
+        cursor.execute("""
+            SELECT p.property_id, p.property_type, p.location, p.status
+            FROM property p
+            JOIN owner o ON p.owner_id = o.owner_id
+            WHERE o.user_id = %s
+        """, [user_id])
+        properties = cursor.fetchall()
+
+    is_owner = request.user.is_authenticated and request.user.id == owner[1]
+
+    return render(request, 'view_profile.html', {
+        'owner': owner,
+        'properties': properties,
+        'is_owner': is_owner
+    })
+
+def view_developer(request, developer_id):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM developer WHERE developer_id = %s", [developer_id])
+        developer = cursor.fetchone()
+
+        cursor.execute("""
+            SELECT property_id, property_type, location, status
+            FROM property
+            WHERE developer_id = %s
+        """, [developer_id])
+        properties = cursor.fetchall()
+
+    return render(request, 'view_developer.html', {'developer': developer, 'properties': properties})
+

@@ -17,7 +17,9 @@
         <tbody>
             {% for developer in developers %}
             <tr>
-                <td>{{ developer.0 }}</td> <!-- name -->
+                <td>
+                    <a href="{% url 'view_developer' developer.3 %}">{{ developer.0}}</a>
+                </td>
                 <td>{{ developer.1 }}</td> <!-- address -->
                 <td>{{ developer.2 }}</td> <!-- phone_number -->
                 <td>

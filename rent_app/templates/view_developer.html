@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2>{{ developer.1 }}</h2>
+    <p><strong>Address:</strong> {{ developer.2 }}</p>
+    <p><strong>Phone:</strong> {{ developer.3 }}</p>
+
+    <h4 class="mt-4">Developed Properties</h4>
+
+    {% if properties %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>Type</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for property in properties %}
+                <tr>
+                    <td>{{ property.1 }}</td>
+                    <td>{{ property.2 }}</td>
+                    <td>{{ property.3 }}</td>
+                    <td class="text-center">
+                        <a href="{% url 'view_property' property.0 %}" class="btn btn-sm btn-outline-primary">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-muted">No properties developed.</p>
+    {% endif %}
+</div>
+{% endblock %}
