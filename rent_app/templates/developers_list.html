@@ -1,35 +1,33 @@
 {% extends "./base.html" %}
 
 {% block content %}
-    <div class="container mt-5">
-        <h1 class="mb-4">Developers List</h1>
-        <a href="{% url 'create_developer' %}" class="btn btn-success mb-3">Add New Developer</a>
-        
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Developer ID</th>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Phone Number</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for developer in developers %}
-                <tr>
-                    <td>{{ developer.0 }}</td> <!-- developer_id -->
-                    <td>{{ developer.1 }}</td> <!-- name -->
-                    <td>{{ developer.2 }}</td> <!-- address -->
-                    <td>{{ developer.3 }}</td> <!-- phone_number -->
-                    <td>
-                        <a href="#" class="btn btn-warning btn-sm">Edit</a> |
-                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+<div class="container mt-5">
+    <h1 class="mb-4">Developers List</h1>
+    <a href="{% url 'create_developer' %}" class="btn btn-success mb-3">Add New Developer</a>
 
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for developer in developers %}
+            <tr>
+                <td>{{ developer.0 }}</td> <!-- name -->
+                <td>{{ developer.1 }}</td> <!-- address -->
+                <td>{{ developer.2 }}</td> <!-- phone_number -->
+                <td>
+                    <a href="{% url 'edit_developer' developer.3 %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'delete_developer' developer.3 %}" class="btn btn-danger btn-sm"
+                       onclick="return confirm('Are you sure you want to delete this developer?');">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
