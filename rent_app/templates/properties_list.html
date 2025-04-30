@@ -42,10 +42,15 @@
         </div>
     </form>
 
+    <a href="{% url 'clear_properties' %}" class="btn btn-danger"
+        onclick="return confirm('Are you sure you want to delete ALL properties?');">
+        Clear All
+    </a>
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">Property Listings</h2>
         <a href="{% url 'create_property' %}" class="btn btn-primary">Add New Property</a>
     </div>
+
 
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle">
