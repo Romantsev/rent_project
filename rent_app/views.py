@@ -451,5 +451,7 @@ def clear_properties(request):
 
 def clear_developers(request):
     with connection.cursor() as cursor:
+        cursor.execute("DELETE FROM inspection")
+        cursor.execute("DELETE FROM property")
         cursor.execute("DELETE FROM developer")
     return redirect('list_developers')
