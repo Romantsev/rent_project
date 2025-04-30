@@ -1,37 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Developers List</title>
-</head>
-<body>
-    <h1>Developers List</h1>
-    <a href="{% url 'create_developer' %}">Add New Developer</a>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Developer ID</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Phone Number</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for developer in developers %}
-            <tr>
-                <td>{{ developer.0 }}</td> <!-- developer_id -->
-                <td>{{ developer.1 }}</td> <!-- name -->
-                <td>{{ developer.2 }}</td> <!-- address -->
-                <td>{{ developer.3 }}</td> <!-- phone_number -->
-                <td>
-                    <a href="#">Edit</a> |
-                    <a href="#">Delete</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+{% extends "./base.html" %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Developers List</h1>
+        <a href="{% url 'create_developer' %}" class="btn btn-success mb-3">Add New Developer</a>
+        
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Developer ID</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Phone Number</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for developer in developers %}
+                <tr>
+                    <td>{{ developer.0 }}</td> <!-- developer_id -->
+                    <td>{{ developer.1 }}</td> <!-- name -->
+                    <td>{{ developer.2 }}</td> <!-- address -->
+                    <td>{{ developer.3 }}</td> <!-- phone_number -->
+                    <td>
+                        <a href="#" class="btn btn-warning btn-sm">Edit</a> |
+                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
