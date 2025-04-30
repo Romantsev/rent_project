@@ -2,6 +2,46 @@
 
 {% block content %}
 <div class="container mt-5">
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-md-3">
+          <input type="text" name="search" value="{{ filters.search }}" class="form-control" placeholder="Search...">
+        </div>
+        <div class="col-md-2">
+          <select name="status" class="form-select">
+            <option value="">All Status</option>
+            <option value="Available" {% if filters.status == "Available" %}selected{% endif %}>Available</option>
+            <option value="Pending" {% if filters.status == "Pending" %}selected{% endif %}>Pending</option>
+            <option value="Sold" {% if filters.status == "Sold" %}selected{% endif %}>Sold</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <select name="type" class="form-select">
+            <option value="">All Types</option>
+            <option value="Apartment" {% if filters.type == "Apartment" %}selected{% endif %}>Apartment</option>
+            <option value="House" {% if filters.type == "House" %}selected{% endif %}>House</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <select name="market" class="form-select">
+            <option value="">All Markets</option>
+            <option value="Yes" {% if filters.market == "Yes" %}selected{% endif %}>Primary</option>
+            <option value="No" {% if filters.market == "No" %}selected{% endif %}>Secondary</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <select name="sort" class="form-select">
+            <option value="">Default Sort</option>
+            <option value="location" {% if filters.sort == "location" %}selected{% endif %}>By Location</option>
+            <option value="price" {% if filters.sort == "price" %}selected{% endif %}>By Price</option>
+            <option value="status" {% if filters.sort == "status" %}selected{% endif %}>By Status</option>
+            <option value="type" {% if filters.sort == "type" %}selected{% endif %}>By Type</option>
+          </select>
+        </div>
+        <div class="col-md-1">
+          <button type="submit" class="btn btn-primary w-100">Go</button>
+        </div>
+      </form>
+      
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">Property Listings</h2>
         <a href="{% url 'create_property' %}" class="btn btn-primary">Add New Property</a>

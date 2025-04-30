@@ -14,22 +14,67 @@ def list_properties(request):
             if result:
                 user_owner_id = result[0]
 
+    search = request.GET.get("search", "").strip()
+    filter_status = request.GET.get("status", "")
+    filter_type = request.GET.get("type", "")
+    filter_market = request.GET.get("market", "")
+    sort = request.GET.get("sort", "p.property_id")
+
+    query = """
+        SELECT 
+            p.property_type, p.location, p.primary_market, p.status,
+            o.name AS owner_name, d.name AS developer_name, p.property_id, p.owner_id
+        FROM 
+            Property p
+        JOIN owner o ON p.owner_id = o.owner_id
+        JOIN developer d ON p.developer_id = d.developer_id
+        WHERE 1=1
+    """
+
+    params = []
+
+    if search:
+        query += " AND (p.location ILIKE %s OR d.name ILIKE %s OR p.status ILIKE %s)"
+        params.extend([f"%{search}%"] * 3)
+
+    if filter_status:
+        query += " AND p.status = %s"
+        params.append(filter_status)
+
+    if filter_type:
+        query += " AND p.property_type = %s"
+        params.append(filter_type)
+
+    if filter_market:
+        query += " AND p.primary_market = %s"
+        params.append(filter_market)
+
+    allowed_sorts = {
+        "price": "p.price",
+        "status": "p.status",
+        "location": "p.location",
+        "type": "p.property_type"
+    }
+    sort_column = allowed_sorts.get(sort, "p.property_id")
+
+    query += f" ORDER BY {sort_column} ASC"
+
     with connection.cursor() as cursor:
-        cursor.execute("""
-            SELECT 
-                p.property_type, p.location, p.primary_market, p.status,
-                o.name AS owner_name, d.name AS developer_name, p.property_id, p.owner_id
-            FROM 
-                Property p
-            JOIN owner o ON p.owner_id = o.owner_id
-            JOIN developer d ON p.developer_id = d.developer_id
-        """)
+        cursor.execute(query, params)
         properties = cursor.fetchall()
 
     return render(request, 'properties_list.html', {
         'properties': properties,
-        'user_owner_id': user_owner_id
+        'user_owner_id': user_owner_id,
+        'filters': {
+            'search': search,
+            'status': filter_status,
+            'type': filter_type,
+            'market': filter_market,
+            'sort': sort
+        }
     })
+
 
 def create_property(request):
     errors = []
