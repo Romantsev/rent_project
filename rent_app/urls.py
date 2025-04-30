@@ -19,4 +19,8 @@ urlpatterns = [
    path('developer/<int:developer_id>/edit/', views.edit_developer, name='edit_developer'),
    path('developer/<int:developer_id>/delete/', views.delete_developer, name='delete_developer'),
 
+   path('property/<int:property_id>/inspection/add/', views.add_inspection, name='add_inspection'),
+   path('inspection/<int:inspection_id>/edit/', views.edit_inspection, name='edit_inspection'),
+   path('inspection/<int:inspection_id>/delete/', views.delete_inspection, name='delete_inspection'),
+
 ]

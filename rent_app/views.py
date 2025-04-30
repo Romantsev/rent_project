@@ -98,6 +98,14 @@ def view_property(request, property_id):
         """, [property_id])
         property_data = cursor.fetchone()
 
+        cursor.execute("""
+            SELECT inspection_date, property_condition
+            FROM inspection
+            WHERE property_id = %s
+            ORDER BY inspection_date DESC
+        """, [property_id])
+        inspections = cursor.fetchall()
+
     is_owner = False
     if request.user.is_authenticated:
         with connection.cursor() as cursor:
@@ -108,6 +116,7 @@ def view_property(request, property_id):
 
     return render(request, 'view_property.html', {
         'property': property_data,
+        'inspections': inspections,
         'is_owner': is_owner
     })
 
@@ -152,22 +161,6 @@ def list_owners(request):
         owners = cursor.fetchall()
     return render(request, 'owners_list.html', {'owners': owners})
 
-def create_owner(request):
-    if request.method == 'POST':
-        owner_type = request.POST['owner_type']
-        name = request.POST['name']
-        address = request.POST['address']
-        phone_number = request.POST['phone_number']
-
-        with connection.cursor() as cursor:
-            cursor.execute("""
-                INSERT INTO public.owner (owner_type, name, address, phone_number)
-                VALUES (%s, %s, %s, %s)
-            """, [owner_type, name, address, phone_number])
-        return redirect('list_owners')
-
-    return render(request, 'create_owner.html')
-
 def list_developers(request):
     with connection.cursor() as cursor:
         cursor.execute("""
@@ -176,7 +169,6 @@ def list_developers(request):
         """)
         developers = cursor.fetchall()
     return render(request, 'developers_list.html', {'developers': developers})
-
 
 def create_developer(request):
     if request.method == 'POST':
@@ -214,7 +206,6 @@ def delete_developer(request, developer_id):
         cursor.execute("DELETE FROM property WHERE developer_id = %s", [developer_id])
         cursor.execute("DELETE FROM developer WHERE developer_id = %s", [developer_id])
     return redirect('list_developers')
-
 
 def register_user(request):
     if request.method == 'POST':
@@ -254,3 +245,42 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+def add_inspection(request, property_id):
+    if request.method == 'POST':
+        inspection_date = request.POST['inspection_date']
+        property_condition = request.POST['property_condition']
+
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                INSERT INTO inspection (property_id, inspection_date, property_condition)
+                VALUES (%s, %s, %s)
+            """, [property_id, inspection_date, property_condition])
+        return redirect('view_property', property_id=property_id)
+
+    return render(request, 'add_inspection.html', {'property_id': property_id})
+
+def edit_inspection(request, inspection_id):
+    if request.method == 'POST':
+        inspection_date = request.POST['inspection_date']
+        property_condition = request.POST['property_condition']
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                UPDATE inspection SET inspection_date=%s, property_condition=%s
+                WHERE inspection_id=%s
+            """, [inspection_date, property_condition, inspection_id])
+            cursor.execute("SELECT property_id FROM inspection WHERE inspection_id = %s", [inspection_id])
+            prop_id = cursor.fetchone()[0]
+        return redirect('view_property', property_id=prop_id)
+
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT inspection_date, property_condition, property_id FROM inspection WHERE inspection_id = %s", [inspection_id])
+        inspection = cursor.fetchone()
+    return render(request, 'edit_inspection.html', {'inspection': inspection, 'inspection_id': inspection_id})
+
+def delete_inspection(request, inspection_id):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT property_id FROM inspection WHERE inspection_id = %s", [inspection_id])
+        prop_id = cursor.fetchone()[0]
+        cursor.execute("DELETE FROM inspection WHERE inspection_id = %s", [inspection_id])
+    return redirect('view_property', property_id=prop_id)
