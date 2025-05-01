@@ -1,29 +1,29 @@
 {% extends "./base.html" %}
 {% block content %}
 <div class="container mt-5">
-    <h1 class="mb-4">Create Developer</h1>
+    <h1 class="mb-4">Додати забудовника</h1>
     <form method="post">
         {% csrf_token %}
         <div class="mb-3">
-            <label for="name" class="form-label">Name:</label>
+            <label for="name" class="form-label">Ім'я/назва:</label>
             <input type="text" name="name" id="name" class="form-control" placeholder="Developer Name" required>
         </div>
 
         <div class="mb-3">
-            <label for="address" class="form-label">Address:</label>
+            <label for="address" class="form-label">Адреса:</label>
             <input type="text" name="address" id="address" class="form-control" placeholder="Developer Address" required>
         </div>
 
         <div class="mb-3">
-            <label for="phone_number" class="form-label">Phone Number:</label>
+            <label for="phone_number" class="form-label">Номер телефону:</label>
             <input type="text" name="phone_number" id="phone_number" class="form-control" placeholder="Phone Number" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Create Developer</button>
+        <button type="submit" class="btn btn-primary">Додати</button>
     </form>
 
     <br>
-    <a href="{% url 'list_developers' %}" class="btn btn-secondary">Back to Developers List</a>
+    <a href="{% url 'list_developers' %}" class="btn btn-secondary">Повернутися до списку забудовників</a>
 </div>
 
 {% endblock %}

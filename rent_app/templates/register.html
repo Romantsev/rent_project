@@ -1,41 +1,52 @@
 {% extends "./base.html" %}
 {% block content %}
 <div class="container mt-5" style="max-width: 600px;">
-    <h2 class="mb-4 text-center">Register</h2>
+    <h2 class="mb-4 text-center">Зареєструватися</h2>
     <form method="post" class="border p-4 shadow rounded bg-light">
         {% csrf_token %}
 
         <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
+            <label for="username" class="form-label">Ім'я (username)</label>
             <input type="text" name="username" id="username" class="form-control" placeholder="Enter your username" required>
         </div>
 
         <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
+            <label for="password" class="form-label">Пароль</label>
             <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
         </div>
 
         <div class="mb-3">
-            <label for="owner_type" class="form-label">Owner Type</label>
-            <input type="text" name="owner_type" id="owner_type" class="form-control" placeholder="Individual or Company" required>
+            <label class="form-label">Тип володаря</label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="owner_type" id="individual" value="Individual" required>
+                <label class="form-check-label" for="individual">
+                    Фізична особа
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="owner_type" id="company" value="Company">
+                <label class="form-check-label" for="company">
+                    Компанія
+                </label>
+            </div>
         </div>
 
         <div class="mb-3">
-            <label for="name" class="form-label">Full Name</label>
+            <label for="name" class="form-label">Повне ім'я/назва</label>
             <input type="text" name="name" id="name" class="form-control" placeholder="Owner's full name" required>
         </div>
 
         <div class="mb-3">
-            <label for="address" class="form-label">Address</label>
+            <label for="address" class="form-label">Адреса</label>
             <input type="text" name="address" id="address" class="form-control" placeholder="Address" required>
         </div>
 
         <div class="mb-3">
-            <label for="phone_number" class="form-label">Phone Number</label>
+            <label for="phone_number" class="form-label">Номер телефону</label>
             <input type="text" name="phone_number" id="phone_number" class="form-control" placeholder="+380XXXXXXXXX" required>
         </div>
 
-        <button type="submit" class="btn btn-success w-100">Register</button>
+        <button type="submit" class="btn btn-success w-100">Зареєструватися</button>
     </form>
 </div>
 {% endblock %}

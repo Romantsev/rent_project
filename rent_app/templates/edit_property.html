@@ -2,70 +2,103 @@
 
 {% block content %}
 <div class="container mt-5" style="max-width: 700px;">
-    <h2 class="mb-4 text-center">Edit Property</h2>
+    <h2 class="mb-4 text-center">Редагувати нерухомість</h2>
+    {% if errors %}
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
     <form method="post" class="border p-4 shadow rounded bg-light">
         {% csrf_token %}
 
         <div class="mb-3">
-            <label class="form-label">Property Type</label>
-            <input type="text" name="property_type" class="form-control" value="{{ property.1 }}" required>
+            <label class="form-label">Тип нерухомості</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="property_type" id="apartment" value="Apartment" 
+                    {% if property.1 == "Apartment" %}checked{% endif %} required>
+                <label class="form-check-label" for="apartment">Квартира</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="property_type" id="house" value="House"
+                    {% if property.1 == "House" %}checked{% endif %}>
+                <label class="form-check-label" for="house">Будинок</label>
+            </div>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Location</label>
-            <input type="text" name="location" class="form-control" value="{{ property.2 }}" required>
+            <label for="location" class="form-label">Локація</label>
+            <input type="text" name="location" id="location" class="form-control" value="{{ property.2 }}" required>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Primary Market</label>
-            <input type="text" name="primary_market" class="form-control" value="{{ property.3 }}" required>
+            <label class="form-label">Чи є первинний?</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="primary_market" id="primary_yes" value="Yes" 
+                    {% if property.3 == "Yes" %}checked{% endif %} required>
+                <label class="form-check-label" for="primary_yes">Так</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="primary_market" id="primary_no" value="No"
+                    {% if property.3 == "No" %}checked{% endif %}>
+                <label class="form-check-label" for="primary_no">Ні (Б/у)</label>
+            </div>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Area (m²)</label>
-            <input type="number" step="0.01" name="area" class="form-control" value="{{ property.4 }}" required>
+            <label for="area" class="form-label">Площа (m²)</label>
+            <input type="number" step="0.01" name="area" id="area" class="form-control" value="{{ property.4 }}" required>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Room Count</label>
-            <input type="number" name="room_count" class="form-control" value="{{ property.5 }}" required>
+            <label for="room_count" class="form-label">Кількість кімнат</label>
+            <input type="number" name="room_count" id="room_count" class="form-control" value="{{ property.5 }}" required>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Floor</label>
-            <input type="number" name="floor" class="form-control" value="{{ property.6 }}" required>
+            <label for="floor" class="form-label">Поверх</label>
+            <input type="number" name="floor" id="floor" class="form-control" value="{{ property.6 }}" required>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Address</label>
-            <input type="text" name="address" class="form-control" value="{{ property.7 }}" required>
+            <label for="address" class="form-label">Адреса</label>
+            <input type="text" name="address" id="address" class="form-control" value="{{ property.7 }}" required>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Price ($)</label>
-            <input type="number" step="0.01" name="price" class="form-control" value="{{ property.8 }}" required>
+            <label for="price" class="form-label">Ціна ($)</label>
+            <input type="number" step="0.01" name="price" id="price" class="form-control" value="{{ property.8 }}" required>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Status</label>
-            <input type="text" name="status" class="form-control" value="{{ property.9 }}" required>
+            <label for="status" class="form-label">Стан</label>
+            <select name="status" id="status" class="form-select" required>
+                <option value="" disabled>Обрати стан</option>
+                <option value="Available" {% if property.9 == "Available" %}selected{% endif %}>Доступно</option>
+                <option value="Sold" {% if property.9 == "Sold" %}selected{% endif %}>Продано</option>
+                <option value="Pending" {% if property.9 == "Pending" %}selected{% endif %}>В очікуванні</option>
+            </select>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Description</label>
-            <textarea name="description" class="form-control" rows="3">{{ property.10 }}</textarea>
+            <label for="description" class="form-label">Опис</label>
+            <textarea name="description" id="description" class="form-control" rows="3">{{ property.10 }}</textarea>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Developer</label>
-            <select name="developer_id" class="form-select" required>
+            <label for="developer_id" class="form-label">Забудовник</label>
+            <select name="developer_id" id="developer_id" class="form-select" required>
+                <option value="" disabled>Обери забудовника</option>
                 {% for dev in developers %}
                     <option value="{{ dev.0 }}" {% if dev.0 == property.12 %}selected{% endif %}>{{ dev.1 }}</option>
                 {% endfor %}
             </select>
         </div>
 
-        <button type="submit" class="btn btn-success w-100">Update Property</button>
+        <button type="submit" class="btn btn-success w-100">Оновити</button>
     </form>
 </div>
 {% endblock %}

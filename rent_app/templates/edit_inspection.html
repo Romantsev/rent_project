@@ -1,18 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container mt-5" style="max-width: 600px;">
-  <h2 class="mb-4">Edit Inspection</h2>
+  <h2 class="mb-4">Редагувати перевірку нерухомості</h2>
+
   <form method="post" class="border p-4 rounded shadow bg-light">
     {% csrf_token %}
     <div class="mb-3">
-      <label class="form-label">Inspection Date</label>
+      <label class="form-label">Дата перевірки</label>
       <input type="date" name="inspection_date" class="form-control" value="{{ inspection.0|date:'Y-m-d' }}" required>
     </div>
     <div class="mb-3">
-      <label class="form-label">Condition</label>
+      <label class="form-label">Стан нерухомості</label>
       <textarea name="property_condition" class="form-control" required>{{ inspection.1 }}</textarea>
     </div>
-    <button type="submit" class="btn btn-primary w-100">Update</button>
+    <button type="submit" class="btn btn-primary w-100">Редагувати</button>
   </form>
 </div>
 {% endblock %}

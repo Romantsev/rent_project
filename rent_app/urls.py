@@ -1,7 +1,10 @@
 from django.urls import path
+from django.shortcuts import redirect
 from . import views
 
 urlpatterns = [
+   path('', lambda request: redirect('properties/', permanent=True)),
+   
    path('properties/', views.list_properties, name='list_properties'),
    path('property/create/', views.create_property, name='create_property'),
    path('property/<int:property_id>/', views.view_property, name='view_property'),
@@ -30,5 +33,4 @@ urlpatterns = [
    path('property/<int:property_id>/inspection/add/', views.add_inspection, name='add_inspection'),
    path('inspection/<int:inspection_id>/edit/', views.edit_inspection, name='edit_inspection'),
    path('inspection/<int:inspection_id>/delete/', views.delete_inspection, name='delete_inspection'),
-
 ]

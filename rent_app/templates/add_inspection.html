@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container mt-5" style="max-width: 600px;">
-  <h2 class="mb-4">Add Inspection</h2>
+  <h2 class="mb-4">Додати обстеження</h2>
   <form method="post" class="border p-4 rounded shadow bg-light">
     {% csrf_token %}
     <div class="mb-3">
-      <label class="form-label">Inspection Date</label>
+      <label class="form-label">Дата обстеження</label>
       <input type="date" name="inspection_date" class="form-control" required>
     </div>
     <div class="mb-3">
-      <label class="form-label">Condition</label>
+      <label class="form-label">Умови обстеження</label>
       <textarea name="property_condition" class="form-control" required></textarea>
     </div>
-    <button type="submit" class="btn btn-success w-100">Add</button>
+    <button type="submit" class="btn btn-success w-100">Додати</button>
   </form>
 </div>
 {% endblock %}

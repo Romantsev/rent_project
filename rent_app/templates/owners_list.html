@@ -1,39 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owners List</title>
-</head>
-<body>
-    <h1>Owners List</h1>
-    <a href="{% url 'create_owner' %}">Add New Owner</a>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Owner ID</th>
-                <th>Owner Type</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Phone Number</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for owner in owners %}
-            <tr>
-                <td>{{ owner.0 }}</td> <!-- owner_id -->
-                <td>{{ owner.1 }}</td> <!-- owner_type -->
-                <td>{{ owner.2 }}</td> <!-- name -->
-                <td>{{ owner.3 }}</td> <!-- address -->
-                <td>{{ owner.4 }}</td> <!-- phone_number -->
-                <td>
-                    <a href="#">Edit</a> |
-                    <a href="#">Delete</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">Список володарів</h1>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Owner ID</th>
+                    <th>Тип</th>
+                    <th>Ім’я</th>
+                    <th>Адреса</th>
+                    <th>Телефон</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for owner in owners %}
+                <tr>
+                    <td>{{ owner.0 }}</td>
+                    <td>{{ owner.1 }}</td>
+                    <td>{{ owner.2 }}</td>
+                    <td>{{ owner.3 }}</td>
+                    <td>{{ owner.4 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
