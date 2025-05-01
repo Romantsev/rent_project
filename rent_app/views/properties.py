@@ -71,44 +71,40 @@ def list_properties(request):
     filter_status = request.GET.get("status", "")
     filter_type = request.GET.get("type", "")
     filter_market = request.GET.get("market", "")
-    sort = request.GET.get("sort", "p.property_id")
+    sort = request.GET.get("sort", "property_id")
 
     query = """
         SELECT 
-            p.property_type, p.location, p.primary_market, p.status,
-            o.name AS owner_name, d.name AS developer_name, p.property_id, p.owner_id, o.user_id, d.developer_id
-        FROM 
-            Property p
-        JOIN owner o ON p.owner_id = o.owner_id
-        JOIN developer d ON p.developer_id = d.developer_id
+            property_type, location, primary_market, status,
+            owner_name, developer_name, property_id, owner_id, user_id, developer_id
+        FROM property_view
         WHERE 1=1
     """
-
     params = []
 
     if search:
-        query += " AND (p.location ILIKE %s OR d.name ILIKE %s OR p.status ILIKE %s)"
+        query += " AND (location ILIKE %s OR developer_name ILIKE %s OR status ILIKE %s)"
         params.extend([f"%{search}%"] * 3)
 
     if filter_status:
-        query += " AND p.status = %s"
+        query += " AND status = %s"
         params.append(filter_status)
 
     if filter_type:
-        query += " AND p.property_type = %s"
+        query += " AND property_type = %s"
         params.append(filter_type)
 
     if filter_market:
-        query += " AND p.primary_market = %s"
+        query += " AND primary_market = %s"
         params.append(filter_market)
 
     allowed_sorts = {
-        "price": "p.price",
-        "status": "p.status",
-        "location": "p.location",
-        "type": "p.property_type"
+        "price": "price",
+        "status": "status",
+        "location": "location",
+        "type": "property_type"
     }
-    sort_column = allowed_sorts.get(sort, "p.property_id")
+    sort_column = allowed_sorts.get(sort, "property_id")
 
     query += f" ORDER BY {sort_column} ASC"
 
