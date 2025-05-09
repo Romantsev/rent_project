@@ -73,22 +73,22 @@
             <tbody>
                 {% for property in properties %}
                 <tr>
-                    <td>{{ property.0 }}</td>
-                    <td>{{ property.1 }}</td>
-                    <td>{{ property.2 }}</td>
-                    <td>{{ property.3 }}</td>
+                    <td>{{ property.property_type }}</td>
+                    <td>{{ property.location }}</td>
+                    <td>{{ property.primary_market }}</td>
+                    <td>{{ property.status }}</td>
                     <td>
-                        <a href="{% url 'view_profile' property.8 %}">{{ property.4 }}</a>
+                        <a href="{% url 'view_profile' property.user_id %}">{{ property.owner_name }}</a>
                     </td>
                     <td>
-                        <a href="{% url 'view_developer' property.9 %}">{{ property.5 }}</a>
+                        <a href="{% url 'view_developer' property.developer_id %}">{{ property.developer_name }}</a>
                     </td>
                     <td class="text-center">
-                        <a href="{% url 'view_property' property.6 %}" class="btn btn-sm btn-outline-primary">Деталі</a>
-
-                        {% if user_owner_id  ==  property.7 %}
-                        <a href="{% url 'edit_property' property.6 %}" class="btn btn-sm btn-outline-warning">Редагувати</a>
-                        <a href="{% url 'delete_property' property.6 %}" class="btn btn-sm btn-outline-danger"
+                        <a href="{% url 'view_property' property.property_id %}" class="btn btn-sm btn-outline-primary">Деталі</a>
+                
+                        {% if user_owner_id == property.owner_id %}
+                        <a href="{% url 'edit_property' property.property_id %}" class="btn btn-sm btn-outline-warning">Редагувати</a>
+                        <a href="{% url 'delete_property' property.property_id %}" class="btn btn-sm btn-outline-danger"
                             onclick="return confirm('Are you sure you want to delete this property?');">Видалити</a>
                         {% endif %}
                     </td>
@@ -98,6 +98,7 @@
                     <td colspan="7" class="text-center text-muted">Нема нерухомостей.</td>
                 </tr>
                 {% endfor %}
+                
             </tbody>
         </table>
     </div>

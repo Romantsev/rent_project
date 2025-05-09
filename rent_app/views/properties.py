@@ -105,12 +105,13 @@ def list_properties(request):
         "type": "property_type"
     }
     sort_column = allowed_sorts.get(sort, "property_id")
-
     query += f" ORDER BY {sort_column} ASC"
 
     with connection.cursor() as cursor:
         cursor.execute(query, params)
-        properties = cursor.fetchall()
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        properties = [dict(zip(columns, row)) for row in rows]  # Преобразуем в список словарей
 
     return render(request, 'properties_list.html', {
         'properties': properties,
@@ -123,7 +124,6 @@ def list_properties(request):
             'sort': sort
         }
     })
-
 def view_property(request, property_id):
     with connection.cursor() as cursor:
         cursor.execute("""
@@ -144,12 +144,20 @@ def view_property(request, property_id):
         property_data = dict(zip(columns, row))
 
         cursor.execute("""
-            SELECT inspection_date, property_condition
+            SELECT inspection_id, inspection_date, property_condition
             FROM inspection
             WHERE property_id = %s
             ORDER BY inspection_date DESC
         """, [property_id])
-        inspections = cursor.fetchall()
+        rows = cursor.fetchall()
+        inspections = [
+            {
+                'inspection_id': row[0],
+                'inspection_date': row[1],
+                'property_condition': row[2]
+            }
+            for row in rows
+        ]
 
     is_owner = False
     if request.user.is_authenticated:
