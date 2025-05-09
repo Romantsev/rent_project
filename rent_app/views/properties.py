@@ -204,6 +204,7 @@ def edit_property(request, property_id):
 
 def delete_property(request, property_id):
     with connection.cursor() as cursor:
+        cursor.execute("DELETE FROM inspection WHERE property_id = %s", [property_id])
         cursor.execute("DELETE FROM property WHERE property_id = %s", [property_id])
     return redirect('list_properties')
 
