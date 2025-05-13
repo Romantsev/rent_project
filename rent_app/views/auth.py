@@ -9,6 +9,11 @@ def register_user(request):
         username = request.POST['username']
         password = request.POST['password']
 
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT COUNT(*) FROM auth_user WHERE username = %s", [username])
+            if cursor.fetchone()[0] > 0:
+                return render(request, 'register.html', {'error': 'Username already exists'})
+
         user = User.objects.create_user(username=username, password=password)
 
         owner_type = request.POST['owner_type']

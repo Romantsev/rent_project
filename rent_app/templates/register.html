@@ -2,6 +2,17 @@
 {% block content %}
 <div class="container mt-5" style="max-width: 600px;">
     <h2 class="mb-4 text-center">Зареєструватися</h2>
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    {% if success %}
+        <div class="alert alert-success" role="alert">
+            {{ success }}
+        </div>
+    {% endif %}
     <form method="post" class="border p-4 shadow rounded bg-light">
         {% csrf_token %}
 
