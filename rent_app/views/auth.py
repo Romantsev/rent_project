@@ -1,16 +1,17 @@
 from django.shortcuts import render, redirect
 from django.db import connection
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 
 def register_user(request):
+    User = get_user_model()
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
 
         with connection.cursor() as cursor:
-            cursor.execute("SELECT COUNT(*) FROM auth_user WHERE username = %s", [username])
+            cursor.execute("SELECT COUNT(*) FROM rent_app_customuser WHERE username = %s", [username])
             if cursor.fetchone()[0] > 0:
                 return render(request, 'register.html', {'error': 'Username already exists'})
 

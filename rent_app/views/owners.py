@@ -88,6 +88,6 @@ def delete_profile(request, user_id):
       cursor.execute("DELETE FROM inspection WHERE property_id IN (SELECT property_id FROM property WHERE owner_id = (SELECT owner_id FROM owner WHERE user_id = %s))", [user_id])
       cursor.execute("DELETE FROM property WHERE owner_id = (SELECT owner_id FROM owner WHERE user_id = %s)", [user_id])
       cursor.execute("DELETE FROM owner WHERE user_id = %s", [user_id])
-      cursor.execute("DELETE FROM auth_user WHERE id = %s", [user_id])
+      cursor.execute("DELETE FROM rent_app_customuser WHERE id = %s", [user_id])
 
    return redirect('login')
